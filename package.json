@@ -1,0 +1,14 @@
+{
+  "name": "shenanigo-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Personal GitHub Pages site — markdown posts built into a static site.",
+  "scripts": {
+    "build": "node build.mjs",
+    "serve": "node build.mjs && npx --yes serve public"
+  },
+  "dependencies": {
+    "marked": "^12.0.0"
+  }
+}
