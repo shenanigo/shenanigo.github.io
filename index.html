@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&gt;_ shenanigo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0a; --bg2: #0f0f0f; --bg3: #141414;
+  --text: #b8b8b8; --bright: #e8e8e8; --dim: #555; --dim2: #333;
+  --accent: #7ec8e3; --green: #69db7c;
+  --border: #222; --border2: #2c2c2c; --mono: 'IBM Plex Mono', monospace;
+}
+html.light {
+  --bg: #f5f5f0; --bg2: #efefea; --bg3: #e8e8e3;
+  --text: #555; --bright: #1a1a1a; --dim: #999; --dim2: #ccc;
+  --accent: #2a8fa8; --green: #2a7a3a;
+  --border: #ddddd8; --border2: #d0d0ca;
+}
+html { font-size: 15px; }
+body, nav, .post-window, footer, .theme-toggle {
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+body {
+  background: var(--bg); color: var(--text); font-family: var(--mono);
+  line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column;
+}
+.site-wrap { max-width: 680px; width: 100%; margin: 0 auto; padding: 0 24px; flex: 1; }
+
+/* ─── Nav ─────────────────────────────── */
+nav {
+  display: flex; align-items: center; gap: 24px; padding: 28px 0 0;
+  position: sticky; top: 0; background: var(--bg); z-index: 100;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled { border-bottom-color: var(--border); }
+.nav-logo {
+  color: var(--accent); text-decoration: none; font-weight: 700; font-size: 13px;
+  margin-right: auto; letter-spacing: -0.01em; cursor: pointer;
+}
+nav a.navlink {
+  color: var(--dim); text-decoration: none; font-size: 12px; cursor: pointer;
+  letter-spacing: 0.04em; padding-bottom: 28px; border-bottom: 2px solid transparent;
+  transition: color 0.15s;
+}
+nav a.navlink:hover { color: var(--text); }
+nav a.navlink.active { color: var(--bright); border-bottom-color: var(--accent); }
+
+.theme-toggle {
+  font-family: var(--mono); font-size: 14px; background: none;
+  border: 1px solid var(--border2); color: var(--dim); cursor: pointer;
+  width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; line-height: 1; transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.theme-toggle:hover { color: var(--bright); border-color: var(--dim); background: var(--bg3); }
+
+.content { padding: 52px 0 80px; }
+
+/* ─── Pages ───────────────────────────── */
+.page { display: none; }
+.page.active { display: block; animation: fadeUp 0.25s ease both; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── ABOUT ───────────────────────────── */
+.hero { display: flex; gap: 28px; align-items: flex-start; margin-bottom: 48px; padding-bottom: 40px; border-bottom: 1px solid var(--border); }
+.hero-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; object-position: top center; flex-shrink: 0; filter: grayscale(30%); }
+.hero-name { font-size: 20px; font-weight: 700; color: var(--bright); margin-bottom: 4px; }
+.hero-sub { font-size: 13px; color: var(--dim); margin-bottom: 14px; }
+.hero-desc { font-size: 14px; color: var(--text); line-height: 1.85; max-width: 480px; }
+
+p { font-size: 14px; line-height: 1.85; margin-bottom: 12px; max-width: 560px; }
+
+h2 { font-size: 12px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; margin: 40px 0 16px; }
+
+.htb-badge { display: inline-block; border: 1px solid var(--border); }
+.htb-badge img { display: block; max-width: 280px; height: auto; }
+
+ul { list-style: none; margin-bottom: 12px; }
+ul li { font-size: 14px; color: var(--text); padding: 3px 0; }
+ul li::before { content: '- '; color: var(--dim); }
+ul li a { color: var(--text); text-decoration: none; }
+ul li a:hover { color: var(--accent); text-decoration: underline; }
+.cert-label { font-size: 12px; color: var(--dim); margin: 16px 0 6px; }
+.wip { opacity: 0.6; }
+
+/* Section titles (from index) */
+.section-title {
+  font-size: 11px; font-weight: 700; color: var(--dim);
+  text-transform: uppercase; letter-spacing: 0.12em; margin: 40px 0 16px;
+}
+
+/* Technical Focus / skills */
+.skills-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.skill-tag {
+  font-size: 11px; color: var(--text); border: 1px solid var(--border2);
+  padding: 4px 10px; background: var(--bg3);
+}
+
+/* Projects */
+.project-list { display: flex; flex-direction: column; gap: 0; }
+.project-item {
+  display: block; border: 1px solid var(--border); padding: 16px 18px;
+  text-decoration: none; background: var(--bg3);
+  transition: border-color 0.15s, background 0.15s;
+}
+.project-item:hover { border-color: var(--border2); }
+.project-item:hover .project-name { color: var(--accent); }
+.project-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+.project-name { font-size: 13.5px; font-weight: 700; color: var(--bright); transition: color 0.15s; }
+.project-ext { font-size: 12px; color: var(--accent); }
+.project-desc { font-size: 12.5px; color: var(--text); line-height: 1.75; margin-bottom: 10px; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ─── WRITING ─────────────────────────── */
+h1 { font-size: 20px; font-weight: 700; color: var(--bright); margin-bottom: 32px; }
+
+.filters { display: flex; gap: 20px; margin-bottom: 32px; flex-wrap: wrap; }
+.filter-btn {
+  font-family: var(--mono); font-size: 12px; color: var(--dim);
+  background: none; border: none; cursor: pointer; padding: 0;
+  transition: color 0.1s; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.filter-btn:hover { color: var(--bright); }
+.filter-btn.active { color: var(--accent); }
+
+.post-item {
+  display: grid; grid-template-columns: 90px 1fr; gap: 0 20px;
+  padding: 12px 0; cursor: pointer; border-top: 1px solid var(--border);
+}
+.post-item:first-of-type { border-top: none; }
+.post-item:hover .post-item-title { color: var(--accent); }
+.post-date { font-size: 12px; color: var(--dim); padding-top: 2px; white-space: nowrap; }
+.post-item-title { font-size: 14px; color: var(--bright); line-height: 1.5; transition: color 0.1s; }
+.post-item-meta { font-size: 11px; color: var(--dim); margin-top: 3px; }
+.post-item-tags { grid-column: 2; display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.tag { font-size: 11px; color: var(--dim); }
+.tag::before { content: '#'; }
+
+footer {
+  border-top: 1px solid var(--border); padding: 22px 28px;
+  font-size: 11px; color: var(--dim); margin-top: auto;
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+
+/* ─── Modal ───────────────────────────── */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 32px; }
+.overlay.open { display: flex; }
+.post-window { background: var(--bg2); border: 1px solid var(--border2); width: 100%; max-width: 680px; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; }
+.win-bar { display: flex; align-items: center; height: 36px; padding: 0 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; gap: 8px; background: var(--bg); }
+.win-dots { display: flex; gap: 6px; }
+.win-dot { width: 11px; height: 11px; border-radius: 50%; }
+.win-dot.close { background: #ff5f57; cursor: pointer; }
+.win-dot.min { background: #febc2e; }
+.win-dot.max { background: #28c840; }
+.win-path { font-size: 11px; color: var(--dim); margin: 0 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 60%; }
+.win-body { overflow-y: auto; padding: 32px 36px 40px; flex: 1; }
+.win-body::-webkit-scrollbar { width: 3px; }
+.win-body::-webkit-scrollbar-thumb { background: var(--border); }
+.post-content .meta { font-size: 12px; color: var(--dim); margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); display: flex; gap: 12px; }
+.post-content h2 { font-size: 18px; font-weight: 700; color: var(--bright); margin-bottom: 20px; line-height: 1.4; text-transform: none; letter-spacing: 0; }
+.post-content p { font-size: 14px; line-height: 1.85; color: var(--text); margin-bottom: 14px; max-width: none; }
+.post-content h3 { font-size: 12px; font-weight: 700; color: var(--accent); margin: 24px 0 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+.post-content code { font-family: var(--mono); font-size: 12px; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; padding: 1px 5px; color: var(--green); }
+.post-content pre { background: var(--bg2); border: 1px solid var(--border); padding: 14px 16px; overflow-x: auto; margin-bottom: 14px; }
+.post-content pre code { background: none; border: none; padding: 0; font-size: 12px; color: var(--text); line-height: 1.7; }
+.post-content .post-tags-row { margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; color: var(--dim); }
+
+@media (max-width: 500px) {
+  .hero { flex-direction: column; }
+  .post-item { grid-template-columns: 1fr; }
+  .overlay { padding: 0; }
+  .win-body { padding: 24px 20px; }
+  footer { flex-direction: column; gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<div class="site-wrap">
+  <nav id="nav">
+    <a class="nav-logo" data-page="about">&gt;_ shenanigo</a>
+    <a class="navlink active" data-page="about">about</a>
+    <a class="navlink" data-page="writing">writing</a>
+    <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode" onclick="toggleTheme()">
+      <span id="theme-icon">☀</span>
+    </button>
+  </nav>
+
+  <div class="content">
+
+  <!-- ═══════════════════════════════════ ABOUT ══ -->
+  <div class="page active" id="page-about">
+
+    <div class="hero">
+      <img src="pfp.png" alt="Shenanigo" class="hero-avatar">
+      <div>
+        <div class="hero-name">Shenanigo</div>
+        <div class="hero-sub">IT Security Specialist</div>
+        <div class="hero-desc">Working in a Cyber Defence Centre — SIEM, threat detection, incident response. Completing a BSc in Information &amp; Cyber Security. Long-term goal: Threat Analyst or Purple Teamer.</div>
+      </div>
+    </div>
+
+    <p>This is my personal space to document what I learn — CTF write-ups, security research, and notes from working in a real-world CDC environment.</p>
+
+    <div class="section-title">Technical Focus</div>
+    <div class="skills-grid">
+      <span class="skill-tag">SIEM / Detection Engineering</span>
+      <span class="skill-tag">KQL / SPL</span>
+      <span class="skill-tag">Incident Response</span>
+      <span class="skill-tag">Memory Forensics</span>
+      <span class="skill-tag">Network Forensics</span>
+      <span class="skill-tag">Threat Intelligence</span>
+      <span class="skill-tag">Volatility3</span>
+      <span class="skill-tag">Wireshark / tshark</span>
+      <span class="skill-tag">Microsoft Defender</span>
+      <span class="skill-tag">Cisco ESA</span>
+      <span class="skill-tag">Purple Teaming</span>
+      <span class="skill-tag">CTF / HTB</span>
+    </div>
+
+    <div class="section-title">Projects</div>
+    <div class="project-list">
+      <a href="https://threatlens-pied.vercel.app/" class="project-item" target="_blank" rel="noopener">
+        <div class="project-top">
+          <span class="project-name">ThreatLense</span>
+          <span class="project-ext">↗</span>
+        </div>
+        <div class="project-desc">Live CTI feed aggregator pulling from CISA KEV, NIST NVD, and SANS ISC — filterable by severity and affected status.</div>
+        <div class="project-tags">
+          <span class="skill-tag">Threat Intelligence</span>
+          <span class="skill-tag">CISA / NVD / SANS</span>
+          <span class="skill-tag">Vercel</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="section-title">Certifications</div>
+    <div class="cert-label">Defensive</div>
+    <ul>
+      <li class="wip">BSc Information & Cyber Security (in progress)</li>
+    </ul>
+
+    <div class="section-title">Links</div>
+    <ul>
+      <li><a href="https://github.com/Shenanigo" target="_blank">GitHub — Shenanigo</a></li>
+    </ul>
+
+  </div>
+
+  <!-- ═══════════════════════════════════ WRITING ══ -->
+  <div class="page" id="page-writing">
+
+    <h1>Writing</h1>
+
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="research">research</button>
+      <button class="filter-btn" data-filter="malware">malware</button>
+    </div>
+
+    <div id="post-list"></div>
+
+  </div>
+
+  </div><!-- /content -->
+
+</div><!-- /site-wrap -->
+
+<footer>
+  <span>© 2026 Shenanigo</span>
+  <span>&gt;_ shenanigo</span>
+</footer>
+
+<!-- ═══════════════════════════════════ MODAL ══ -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="post-window">
+    <div class="win-bar">
+      <div class="win-dots">
+        <div class="win-dot close" onclick="closePost()"></div>
+        <div class="win-dot min"></div>
+        <div class="win-dot max"></div>
+      </div>
+      <span class="win-path" id="win-path">—</span>
+    </div>
+    <div class="win-body" id="win-body"></div>
+  </div>
+</div>
+
+<script>
+const POSTS = [
+  {
+    date: "06 Jul 2026",
+    words: "1095 words",
+    mins: "5 mins",
+    title: "The Malware That Hid on a Blockchain",
+    type: "malware",
+    tags: ["Malware", "WordPress", "EtherHiding", "ClearFake", "Static-Analysis", "IOCs"],
+    content: `
+      <div class="meta"><span>06 Jul 2026</span><span>·</span><span>1095 words</span><span>·</span><span>5 mins</span></div>
+      <h2>The Malware That Hid on a Blockchain</h2>
+      <p>The site was a perfectly ordinary WordPress install. Nothing in the theme looked off at a glance &mdash; until I noticed the same 123&nbsp;KB blob of minified JavaScript appearing twice in the page source: once injected into <code>wp_head</code> near the top, once into <code>wp_footer</code> at the bottom. Identical bytes, two copies. Legitimate plugins don't do that. Something had written itself into the theme, and it wanted to run whether or not the page finished loading.</p>
+
+      <h3>Two copies of the same thing</h3>
+      <p>The blob was packed with obfuscator.io &mdash; base64 over an RC4 layer, with the readable strings shattered into an array that gets rotated at load time until an internal checksum matches a hardcoded magic number. That rotation is the packer's way of scrambling array order so you can't just read entries top to bottom. There's also a self-defeating twist: the sample checks its own source against a regex and misbehaves if it detects it's been beautified, so I didn't want to run it through an online formatter and I certainly wasn't going to execute it.</p>
+
+      <p>Instead I reimplemented the decoder in Python and ran it against the extracted array offline. Three pieces had to come across faithfully: the packer's hand-rolled base64 (<code>atob</code>) routine, the RC4 body keyed per call, and the load-time rotation. Once the reassembled string table reproduced the packer's own rotation checksum (magic <code>116745</code>, correct at a shift of 268 over the 957-element array), I knew the decode was faithful and not something I'd mangled &mdash; and nothing from the page had run to get there.</p>
+
+      <pre><code>#!/usr/bin/env python3
+"""
+Offline decoder for an obfuscator.io 'base64 + RC4' string array.
+
+Reimplements the sample's _0x5b39(index, key) routine in pure Python so the
+loader's strings can be recovered without executing a single line of its
+JavaScript. The encoded array and rotation magic are lifted verbatim from
+the sample; everything below runs offline.
+"""
+
+# --- lifted from the sample ---------------------------------------------
+# The array function (_0xe064 here) returns ~957 base64 blobs.
+STRING_ARRAY = [
+    # "Q2xlYXJ...", "R2V0Q29u...",  &lt;- paste the extracted array here
+]
+# The load-time IIFE rotates the array until a checksum equals this value.
+# magic = 0x26c02 + -0x13fae + 0x39f*0x2b = 116745  (correct rotation: shift 268)
+ROTATION_MAGIC = 116745
+# obfuscator.io ships its own atob() over the standard base64 alphabet.
+B64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
+
+
+def ob_atob(s):
+    """The packer's hand-rolled base64 decode."""
+    out, buff, bits = bytearray(), 0, 0
+    for ch in s:
+        if ch == "=":
+            break
+        buff = (buff &lt;&lt; 6) | B64.index(ch)
+        bits += 6
+        if bits &gt;= 8:
+            bits -= 8
+            out.append((buff &gt;&gt; bits) &amp; 0xFF)
+    return bytes(out)
+
+
+def rc4(key, data):
+    """Textbook RC4 (KSA + PRGA), keyed per call like the JS decoder."""
+    S, j = list(range(256)), 0
+    for i in range(256):
+        j = (j + S[i] + key[i % len(key)]) &amp; 0xFF
+        S[i], S[j] = S[j], S[i]
+    out, i, j = bytearray(), 0, 0
+    for byte in data:
+        i = (i + 1) &amp; 0xFF
+        j = (j + S[i]) &amp; 0xFF
+        S[i], S[j] = S[j], S[i]
+        out.append(byte ^ S[(S[i] + S[j]) &amp; 0xFF])
+    return bytes(out)
+
+
+def decode(index, key, array):
+    """Python twin of _0x5b39(index, key): base64, then RC4."""
+    return rc4(key.encode(), ob_atob(array[index])).decode("utf-8", "replace")
+
+
+def find_rotation(array):
+    """Shift the array (push(shift())) until the checksum hits the magic --
+    the same de-scramble the loader does at load time, minus the JS. The
+    indices, keys and arithmetic below are copied from the sample's IIFE."""
+    array = list(array)
+    for _ in range(len(array)):
+        try:
+            checksum = int(decode(0x1a3, "k1", array)) + int(decode(0x2f0, "k2", array))
+            if checksum == ROTATION_MAGIC:
+                return array
+        except ValueError:
+            pass
+        array.append(array.pop(0))
+    raise RuntimeError("rotation not found - re-check the magic / alphabet")
+
+
+if __name__ == "__main__":
+    arr = find_rotation(STRING_ARRAY)
+    for n in range(len(arr)):
+        try:
+            print(n, repr(decode(n, "k1", arr)))
+        except Exception:
+            pass</code></pre>
+
+      <h3>What the decoder revealed</h3>
+      <p>The loader's real job fit in a few lines once the strings were readable. It builds a JSON-RPC <code>eth_call</code> request, points it at a public read node for the BNB Smart Chain testnet, and asks a hardcoded contract for its stored value. Whatever comes back gets injected into the page as a fresh <code>&lt;script&gt;</code> element &mdash; and the whole thing loops on a <code>setInterval</code>, so even if you kill the injected node, the loader just fetches and re-injects. Decoding the on-chain response the same way (ABI blob &rarr; ASCII &rarr; base64) yielded roughly 1.5&nbsp;KB of second-stage JavaScript. The malicious stage was never on the compromised server at all. The server only ever hosted the reader.</p>
+
+      <h3>The visitor gate</h3>
+      <p>Before any of that fires, the loader decides whether you're worth attacking. It lowercases <code>navigator.userAgent</code>, <code>document.referrer</code> and <code>location.href</code> and runs a series of string comparisons &mdash; the classic ClearFake filter that quietly skips crawlers, scanners, headless browsers, and anyone poking at admin or API surfaces, so automated tooling sees a clean page and only ordinary visitors get served. </p>
+      <p>Here's that gate, deobfuscated and de-minified:</p>
+
+      <pre><code>
+function shouldRun() {
+  var ua   = navigator.userAgent.toLowerCase();
+  var ref  = document.referrer.toLowerCase();
+  var here = location.href.toLowerCase();
+
+  // 1) drop bots, crawlers, scanners and headless browsers
+  var crawlers = ["bot", "crawl", "spider", "slurp", "headless",
+                  "phantom", "puppeteer", "python", "curl", "wget"];
+  for (var i = 0; i &lt; crawlers.length; i++) {
+    if (ua.indexOf(crawlers[i]) !== -1) return false;
+  }
+
+  // 2) don't fire on admin / API / sitemap surfaces (analysts, indexers)
+  if (here.indexOf("/wp-admin")  !== -1) return false;
+  if (here.indexOf("/wp-json")   !== -1) return false;
+  if (here.indexOf("wp-sitemap") !== -1) return false;
+
+  return true;   // a normal visitor on a content page -&gt; proceed
+}
+
+/* 
+Only a "real" visitor gets the on-chain stage. The loader body that does the
+eth_call, injects the returned &lt;script&gt; and re-arms on setInterval is left as
+a stub here -- the point is the gate, not a working delivery routine. 
+*/
+if (shouldRun()) {
+  loadStageFromContract();
+}</code></pre>
+
+      <h3>Why put it on-chain</h3>
+      <p>This is the EtherHiding technique, and it's the part worth sitting with. Traditional web malware points at a staging server &mdash; an IP or a domain you can sinkhole, block, or get taken down. Here there's nothing to seize. The payload lives in a smart contract's storage: immutable, globally replicated, readable by anyone for the cost of a free RPC call, and completely outside the reach of a hosting abuse report. The attacker can swap the served payload by updating contract state whenever they like, and the compromised site keeps faithfully relaying whatever the current value happens to be. It's a delivery channel with no fixed address to burn.</p>
+
+      <h3>The parts that fought back</h3>
+      <p>The sample assumed it would be analyzed and tried to make that unpleasant. It grabs a reference to the global object through a <code>Function("return this")()</code> trick, wraps a <code>debugger</code> statement in a tight infinite loop to stall anyone stepping through it, checks its own source against a regex to detect reformatting, and overrides the entire console API &mdash; <code>log</code>, <code>warn</code>, <code>info</code>, <code>error</code>, <code>table</code>, <code>trace</code> &mdash; so anything it does stays out of devtools. None of it survives static analysis, but it tells you the author expected a live debugging session and built for it.</p>
+
+      <h3>The lure at the end of the chain</h3>
+      <p>For the visitors it does target, this family's final stage is a social-engineering page: a fake CAPTCHA or a spoofed browser-update prompt that walks the user into pasting and running a command themselves. That "fix it yourself" step is the ClickFix pattern, and it exists precisely to get around the fact that browsers won't silently run native code. The endgame is a stealer &mdash; browser-stored credentials, session cookies, crypto wallets &mdash; pulled from a pair of <code>.shop</code> reload domains.</p>
+
+      <h3>Indicators of compromise</h3>
+      <p>The indicators below are the <em>attacker's</em> infrastructure, not the victim's &mdash; the on-chain read channel, the contract, and the ClickFix delivery domains. They're defanged; re-sharpen before dropping into detections.</p>
+
+      <pre><code># Network indicators are defanged (hxxp, [.]).
+
+Stage 2 -- on-chain read (abused public BSC-testnet RPC nodes):
+  bsc-testnet-rpc.publicnode[.]com
+  bsc-testnet.bnbchain[.]org
+  bsc-testnet.drpc[.]org
+  data-seed-prebsc-1-s1.bnbchain[.]org:8545
+
+  contract method selector : 0x6d4ce63c   (the getter the loader calls)
+  contract address         : 0xFB448D465841C63F3bC433be61Eb692b813D46...
+
+Stage 4 -- ClickFix delivery / infostealer C2:
+  hxxps://dntds[.]shop/teamrepo     (primary)
+  hxxps://sdntds[.]shop/teamrepo    (fallback)
+  dntds[.]shop
+  sdntds[.]shop
+
+Host artifact (on the compromised site):
+  identical obfuscator.io blob injected into wp_head and wp_footer
+  packing : custom-base64 + RC4, string-array rotation, decoder _0x5b39
+  rotation checksum (magic) : 116745
+
+Detection note: the BSC-testnet RPC hosts are legitimate, noisy public infra --
+key detections off the contract address / selector or the .shop C2, not the RPC.</code></pre>
+
+      <h3>Closing the loop</h3>
+      <p>A finding like this is only worth anything if it reaches the people who can act on it. I contacted the site owner directly, explained in plain terms that their WordPress install was serving malware to visitors, and handed over the concrete details: the two injection points in <code>wp_head</code> and <code>wp_footer</code>, the fact that the payload arrives from a smart contract rather than from any file on their server, and the indicators needed to confirm and scope it. I was explicit that the injection lives somewhere persistent &mdash; a theme's <code>functions.php</code>, a must-use plugin, or a row in the <code>wp_options</code> table &mdash; and that pulling the visible script is not enough. A site modified like this should be treated as fully compromised: rotate credentials, and rebuild from a known-good backup rather than patch in place.</p>
+
+      <p>I kept the whole exchange to responsible-disclosure norms &mdash; report privately, give the owner the information and the time to remediate, and don't publish anything that identifies the compromised site. That's why this writeup names no victim domain and withholds anything that would point to it. The attacker's own infrastructure is a different matter: the contract, the RPC abuse and the <code>.shop</code> delivery domains are listed above because defenders can use them and the operator already knows their own indicators. The technique is worth documenting; the victim isn't a trophy.</p>
+
+      <p>What made this one interesting wasn't the obfuscation; obfuscation is table stakes. It was recovering the full picture without ever executing the loader &mdash; decoding the strings offline with the script above, and reading the contract's stored payload with a plain read-only call instead of running the injected code. The clever part of the attack was never the code. It was choosing a place to hide the code where nobody could take it down.</p>
+      <div class="post-tags-row"><span class="tag">Malware</span><span class="tag">WordPress</span><span class="tag">EtherHiding</span><span class="tag">ClearFake</span><span class="tag">Static-Analysis</span><span class="tag">IOCs</span></div>
+    `
+  },
+  {
+    date: "03 Jun 2026",
+    words: "870 words",
+    mins: "5 mins",
+    title: "An SMS Endpoint That Trusted Everybody",
+    type: "research",
+    tags: ["Web", "Broken-Access-Control", "SMS-Abuse", "Bug-Bounty"],
+    content: `
+      <div class="meta"><span>03 Jun 2026</span><span>·</span><span>870 words</span><span>·</span><span>5 mins</span></div>
+      <h2>An SMS Endpoint That Trusted Everybody</h2>
+      <p>A phone-number verification endpoint — meant for an authenticated user adding a new number to their account — could be called without an account and without ever starting registration. From a logged-out browser, a single request triggered a real SMS to <em>any</em> number I supplied. A per-session retry cap existed, but it reset on navigation, leaving no meaningful brake on abuse. Class: Missing Authentication for a Critical Function (CWE-306) / Broken Access Control (OWASP A01:2021).</p>
+      <h3>The feature it was supposed to be</h3>
+      <p>The endpoint — <code>/SmsAuthentication/SendCodeToNewNumber</code> — exists for a sensible reason: a logged-in user wants to add or change the phone number on their account, so the application sends a one-time code by SMS to prove they control the new number. Fine design. The problem is entirely about <em>who</em> is allowed to reach it.</p>
+      <h3>The bug</h3>
+      <p>The endpoint performs a sensitive, real-world action — it makes the backend spend money and put a message on a stranger's phone — but it never checks that the caller is authenticated, or that the target number has anything to do with them. The "logged-in user updating their own number" context is assumed but never enforced. A short <code>fetch()</code> pasted into the dev console, with no session and without touching the registration flow, was enough to make the application send an SMS to an arbitrary, attacker-chosen number.</p>
+      <p>This is the textbook shape of broken access control: the real security control is the front-end flow, not the server. Skip the flow, call the endpoint directly, and the control is gone.</p>
+      <h3>The rate limit that wasn't</h3>
+      <p>There <em>was</em> a brake — just not a useful one. The same call could be fired up to five times before the server returned a "maximum attempts reached" error. But the cap was tied to client-side session state rather than to the target number or the source: navigating back to the main page reset the counter, and the five-shot window reopened. Repeat indefinitely. A limit you can reset at will is a speed bump, and the SMS-flooding primitive survives it intact.</p>
+      <h3>Impact</h3>
+      <p>Because no authentication is required and the destination number is attacker-controlled, this isn't "spam yourself" — it's directed at third parties:</p>
+      <ul>
+        <li><strong>Harassment / SMS bombing.</strong> Messages delivered to a victim's phone they never asked for, trivially scripted.</li>
+        <li><strong>Denial of wallet.</strong> Every message is a billable SMS on the vendor's gateway — an unauthenticated cost-inflation attack at scale.</li>
+        <li><strong>Brand and trust damage.</strong> Messages arrive from a legitimate, recognized sender, causing confusion and giving useful raw material for later social engineering.</li>
+        <li><strong>Zero barrier to entry.</strong> No account, no email, no payment. The cost to launch is a console paste.</li>
+      </ul>
+      <h3>Reproduction (high level)</h3>
+      <p>Deliberately non-actionable — no working payload, target redacted.</p>
+      <pre><code>1. Open the application logged out, without starting registration
+2. Open the browser developer console
+3. Issue one request to the new-number verification endpoint,
+   supplying an arbitrary destination number as the parameter
+4. Observe an SMS delivered to that number
+5. Repeat to the per-session cap, then reload the main page
+   to reset the counter and continue</code></pre>
+      <h3>Root cause and fix</h3>
+      <p>Two server-side assumptions, both wrong: authorization was inferred from UI context instead of enforced at the endpoint, and rate limiting was bound to client-side session state the attacker fully controls. The fix is to require an authenticated session and bind the action to that account server-side, then rate-limit on the destination number <em>and</em> source (IP / account / device) with limits that survive navigation. Add friction — CAPTCHA or proof-of-work — before anything triggers a billable SMS, and alert on send spikes per number as a backstop.</p>
+      <h3>Disclosure</h3>
+      <p>Reported to the vendor through their security contact and kept anonymized here while a fix is pending. If you're doing the same kind of testing: stay inside your authorization, send the minimum number of messages needed to prove impact, and never point the destination at someone who didn't consent.</p>
+      <div class="post-tags-row"><span class="tag">Web</span><span class="tag">Broken-Access-Control</span><span class="tag">SMS-Abuse</span><span class="tag">Bug-Bounty</span></div>
+    `
+  },
+  {
+    date: "11 Nov 2025",
+    words: "900 words",
+    mins: "5 mins",
+    title: "A CAPTCHA That Guarded the Wrong Door",
+    type: "research",
+    tags: ["Web", "Broken-Access-Control", "CAPTCHA", "SMS-Abuse"],
+    content: `
+      <div class="meta"><span>11 Nov 2025</span><span>·</span><span>900 words</span><span>·</span><span>5 mins</span></div>
+      <h2>A CAPTCHA That Guarded the Wrong Door</h2>
+      <p>During account registration, a "resend verification code" endpoint — <code>/ResendSms</code> — would send an SMS to <em>any</em> number an attacker specified, not the number actually entered during registration. A CAPTCHA guards the start of the registration flow, but once inside a registration session the resend action trusts attacker-supplied input and fires real SMS. The registration data itself is never verified: any pattern-valid email and phone number is accepted. Class: Broken Access Control / business logic (≈ CWE-639) plus Improper Control of Interaction Frequency (CWE-799).</p>
+      <h3>The setup</h3>
+      <p>Registration starts the way you'd expect: enter an email and phone number, accept the terms and privacy policy, solve a CAPTCHA. Two things matter. First, none of the registration data is verified at this stage — the email and phone only need to match a valid <em>format</em>, so any throwaway, pattern-valid values are accepted. Second, the CAPTCHA sits at the entrance; solving it lets you proceed. The natural assumption is that this gate protects whatever comes next. It doesn't.</p>
+      <h3>The bug</h3>
+      <p>Inside the registration session, the application exposes a "resend code" endpoint so a user who didn't receive their SMS can ask for another. Reasonable feature. The problem: <code>/ResendSms</code> sends to a number supplied in the request, and never enforces that this number matches the one tied to the in-progress registration. Hand it an arbitrary number and it sends there. "Resend my code" has quietly become "send a code to anyone I choose."</p>
+      <p>This is the same broken-access-control failure as a missing auth check, one layer in: the server makes an authorization-relevant decision — who should receive this SMS — from attacker-controlled input instead of trusted session state.</p>
+      <h3>Why the CAPTCHA doesn't save you</h3>
+      <p>A CAPTCHA is a one-time challenge at the door. But the dangerous action — sending an SMS to an attacker-chosen number — is repeatable, and the CAPTCHA isn't re-presented per send. In the environment I tested, one solved registration session let the resend fire up to five times before a "maximum attempts reached" error.</p>
+      <p>Re-arming is cheap: navigate back to the main page, re-run registration with fresh throwaway data, solve the CAPTCHA again, and you have another batch of five. The challenge raises the cost per batch slightly — but CAPTCHAs are routinely outsourced or automated, the registration data is disposable, and the limit counts per session rather than per destination number. Nothing actually caps how many messages a victim's phone receives. The gate guards entry to the building while the valuable thing sits unlocked in the lobby.</p>
+      <h3>Impact</h3>
+      <ul>
+        <li><strong>Harassment / SMS bombing.</strong> An attacker-supplied victim number receives messages in batches, scriptable around the CAPTCHA.</li>
+        <li><strong>Denial of wallet.</strong> Each message is a billable SMS; the per-session cap doesn't bound total cost because sessions are free to recreate.</li>
+        <li><strong>No identity required.</strong> Throwaway, unverified email and phone get you in; nothing ties the abuse to a real account.</li>
+        <li><strong>A false sense of protection.</strong> The presence of a CAPTCHA can make this path <em>look</em> defended in a quick review — exactly why it's worth calling out.</li>
+      </ul>
+      <p>A higher-friction route than a fully unauthenticated one, but "higher friction" isn't "mitigated" when the friction is a re-solvable challenge and a resettable counter.</p>
+      <h3>Reproduction (high level)</h3>
+      <p>Deliberately non-actionable — no working payload, target redacted.</p>
+      <pre><code>1. Start registration with throwaway but pattern-valid email and phone
+2. Accept terms, solve the CAPTCHA to enter the registration session
+3. Issue a resend request specifying an arbitrary destination number
+4. Observe an SMS delivered to that number
+5. Repeat to the per-session cap, then restart registration with
+   fresh throwaway data to re-arm</code></pre>
+      <h3>Root cause and fix</h3>
+      <p>The resend endpoint authorizes by trusting a number in the request, and the rate limit counts something the attacker can recreate at will.</p>
+      <ul>
+        <li><strong>Bind the destination server-side.</strong> A resend should target only the number associated with the in-progress registration session — from server state, never the request body.</li>
+        <li><strong>Rate-limit on what you're protecting.</strong> Key limits on the destination number and source (IP / device), enforced across sessions and restarts, with global ceilings per number per time window.</li>
+        <li><strong>Don't let a one-time CAPTCHA stand in for ongoing control.</strong> A challenge at the entrance does nothing for a repeatable action behind it — gate the action, re-challenge, or both.</li>
+        <li><strong>Add cost to disposable registrations</strong> so throwaway data can't be cycled freely.</li>
+      </ul>
+      <h3>Disclosure</h3>
+      <p>Reported to the vendor through their security contact and kept anonymized here while a fix is pending. Same rules as always: stay inside your authorization, send the minimum needed to prove impact, and never aim the destination at someone who didn't consent.</p>
+      <h3>Takeaway</h3>
+      <p>Controls get evaluated by where they sit, not by whether they're present. A CAPTCHA, a login wall, a rate limit — each only protects the exact boundary it's placed on. Here the boundary was the front door, while the action that actually cost money and reached strangers lived just inside it, trusting whatever number it was handed. The question to ask of your own apps isn't "is there a control?" but "is the control on the thing that's dangerous?"</p>
+      <div class="post-tags-row"><span class="tag">Web</span><span class="tag">Broken-Access-Control</span><span class="tag">CAPTCHA</span><span class="tag">SMS-Abuse</span></div>
+    `
+  },
+  {
+    date: "26 Sep 2025",
+    words: "1650 words",
+    mins: "8 mins",
+    title: "Six Findings Without a Single Payload",
+    type: "research",
+    tags: ["Web", "Recon", "CVE-Triage", "Disclosure"],
+    content: `
+      <div class="meta"><span>26 Sep 2025</span><span>·</span><span>1650 words</span><span>·</span><span>8 mins</span></div>
+      <h2>Six Findings Without a Single Payload</h2>
+      <p>A passive technology fingerprint of a file-sharing web application surfaced an entire stack of outdated front-end libraries sitting on top of an end-of-life server platform. Six coordinated disclosures came out of it — and not one required sending a malicious request. This is the long version: every finding, why it mattered, and how each was classified without overstating it.</p>
+      <h3>Passive recon: reading the stack</h3>
+      <p>Wappalyzer/BuiltWith-style fingerprinting infers an app's technology from what it already serves everyone: response headers, asset filenames, version banners embedded in library files, and global objects exposed on the page. It's completely passive — no fuzzing, no payloads, nothing that could be mistaken for an attack. For an outsider doing a first pass, it's the cheapest possible map of where the known-CVE surface probably lives.</p>
+      <p>The fingerprint flagged more components than ended up as findings. Only the ones whose <em>confirmed</em> version carried a genuinely applicable CVE made the cut — dropping the version-range false positives instead of reporting everything the tool screamed about is half the work, and the half that earns a triager's trust.</p>
+      <h3>Finding 1 — End-of-life server platform</h3>
+      <p>Response headers placed the application on IIS 8.5, which ships with Windows Server 2012 R2. Extended support for that platform ended on 10 October 2023. After an end-of-life date the vendor stops shipping security patches entirely, so every vulnerability discovered from that point on simply accumulates on the box, unpatched, with no fix ever coming.</p>
+      <p>A single outdated library is a known-vulnerable component you can swap out; an end-of-life operating system is a known-vulnerable <em>foundation</em> under everything else, and the risk only compounds with time. This was filed first and on its own — both because it's the highest-impact item and because the program rejected aggregated findings. Remediation is a platform migration to a supported Windows Server release, not a patch.</p>
+      <h3>Finding 2 — Handlebars (prototype pollution)</h3>
+      <p>The Handlebars templating library was several versions behind. Older Handlebars releases carry prototype-pollution vulnerabilities, and in server-side template-compilation contexts some of those pollution paths have been chained to code execution.</p>
+      <p>The honest classification took restraint. Client-side, this is prototype pollution, and that's how it was filed — not as remote code execution, which only applies under specific server-side conditions I had no evidence were present. Claiming RCE on a version-identified finding with no demonstrated server-side compile path is exactly the kind of overreach that gets a whole report binned. Remediation: upgrade to a current Handlebars release.</p>
+      <h3>Finding 3 — jQuery UI 1.13.x (XSS + dialog DoS)</h3>
+      <p>jQuery UI — a separate library from jQuery core — sat on a 1.13.x release before 1.13.2. That range includes an XSS in the checkboxradio widget (CVE-2022-31160), XSS exposure in the datepicker where untrusted input is bound to options like <code>altField</code> or the <code>*Text</code> settings, and a denial-of-service in the dialog widget where attacker-controlled titles get rendered. All fixed in 1.13.2.</p>
+      <p>Beyond the version bump, the practical hardening note is to never bind untrusted input into those datepicker options, or into <code>.position()</code>'s <code>of</code> option.</p>
+      <h3>Finding 4 — jQuery 3.1.x (prototype pollution + XSS)</h3>
+      <p>This one came with a memorable detail: the scanner reported jQuery <code>3.1.13</code> — a version that was never released. The 3.1 line stops at 3.1.0 and 3.1.1, so the "13" was a parsing artefact. Confirming the real version from the file banner (or <code>jQuery.fn.jquery</code> in the console) put it in the genuine 3.1.x range — old enough to carry three well-known CVEs.</p>
+      <p>Those are prototype pollution in <code>jQuery.extend(true, ...)</code> (CVE-2019-11358, fixed in 3.4.0), and XSS through HTML-manipulation methods like <code>.html()</code> and <code>.append()</code>, including <code>&lt;option&gt;</code> handling (CVE-2020-11022 / CVE-2020-11023, fixed in 3.5.0). All client-side and conditional on the app feeding untrusted input into those APIs. The fix is gratifyingly boring — 3.1 to the current 3.7.1 is largely drop-in, since the painful breaking changes were back at the 2.x to 3.0 jump.</p>
+      <h3>Finding 5 — DataTables 1.10.16 (prototype pollution)</h3>
+      <p>The DataTables plugin was on 1.10.16, inside the 1.10.9–1.10.21 range affected by CVE-2020-28458, a prototype-pollution issue. It was filed as prototype pollution — mapped to "Other → Prototype Pollution" in the program's taxonomy, because no honest "XSS" or "RCE" box fit the actual defect. Remediation: move past the affected range to a current DataTables build.</p>
+      <h3>Finding 6 — Moment.js (ReDoS)</h3>
+      <p>Moment.js was the last finding, and a good illustration of why CVE <em>selection</em> matters as much as finding the bug. Moment carries more than one CVE, including a path-traversal issue (CVE-2022-24785) and a regular-expression denial-of-service. For the submission I led with the ReDoS CVE (CVE-2017-18214), because the impact I was claiming was denial of service — citing the path-traversal CVE under a DoS classification would have been an internal contradiction a triager catches in seconds.</p>
+      <p>Worth noting too that Moment is in maintenance mode and its own maintainers steer new projects elsewhere, so the cleanest remediation is migrating to a modern date library rather than just bumping the version.</p>
+      <h3>Triage honestly, or lose the triager</h3>
+      <p>A running theme across all six: report each component as exactly what it is. The temptation with a stack this stale is to inflate — every prototype pollution becomes "RCE," every client-side XSS becomes "critical," the whole thing gets aggregated into one scary mega-finding. That's how you get rejected, and how your next report gets read with a raised eyebrow.</p>
+      <p>Each item went in as "version-identified, exploitability conditional," mapped to the most accurate vulnerability type rather than the scariest available one, with a CVE-ID that actually matches the claimed impact. Medium-severity findings only land when the triager can trust every line.</p>
+      <h3>Coordinated disclosure, one finding at a time</h3>
+      <p>The program enforced two rules that shaped the whole submission: no aggregated reports, and only one open submission at a time. So the six went in sequentially, in priority order — the end-of-life platform first, then the libraries by descending impact. Annoying as a process, but honestly the right way to report this kind of work anyway: one clean, single-issue report at a time, each standing or falling on its own merits.</p>
+      <h3>Takeaway</h3>
+      <p>Outdated dependencies and end-of-life infrastructure are the least glamorous findings in security, and by sheer volume among the most common real-world risk. You don't need an exploit chain to surface them — passive recon does it in minutes, with zero traffic that looks like an attack. What turns that raw list into something a defender will act on isn't the size of the list or the drama in the writeup; it's accurate classification, CVE mapping that matches the claimed impact, and the restraint to call each component exactly what it is. Six findings, no payloads, and a report a triager could trust end to end.</p>
+      <div class="post-tags-row"><span class="tag">Web</span><span class="tag">Recon</span><span class="tag">CVE-Triage</span><span class="tag">Disclosure</span></div>
+    `
+  }
+];
+</script>
+<script>
+// ── Theme ───────────────────────────────────────────────
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('theme-icon').textContent = isLight ? '☾' : '☀';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.documentElement.classList.add('light');
+    document.getElementById('theme-icon').textContent = '☾';
+  }
+})();
+
+// Sticky nav border on scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// ── Navigation ──────────────────────────────────────────
+function switchPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.navlink').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelector('.navlink[data-page="' + name + '"]').classList.add('active');
+  window.scrollTo({ top: 0 });
+}
+document.querySelectorAll('[data-page]').forEach(a => {
+  a.addEventListener('click', () => switchPage(a.dataset.page));
+});
+
+// ── Posts ───────────────────────────────────────────────
+let currentFilter = 'research';
+
+function renderPosts() {
+  const container = document.getElementById('post-list');
+  if (!container || typeof POSTS === 'undefined') return;
+  container.innerHTML = '';
+  const list = currentFilter === 'all' ? POSTS : POSTS.filter(p => p.type === currentFilter);
+  list.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'post-item';
+    item.onclick = () => openPost(POSTS.indexOf(p));
+    item.innerHTML = `
+      <div class="post-date">${p.date.split(' ').slice(0,2).join(' ')}</div>
+      <div>
+        <div class="post-item-title">${p.title}</div>
+        <div class="post-item-meta">${p.words} · ${p.mins}</div>
+      </div>
+      <div class="post-item-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+document.getElementById('filters').addEventListener('click', e => {
+  if (!e.target.dataset.filter) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  currentFilter = e.target.dataset.filter;
+  renderPosts();
+});
+
+// ── Modal ───────────────────────────────────────────────
+function openPost(i) {
+  document.getElementById('win-path').textContent = POSTS[i].title;
+  document.getElementById('win-body').innerHTML = `<div class="post-content">${POSTS[i].content}</div>`;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePost() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('overlay')) closePost();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePost(); });
+
+renderPosts();
+</script>
+</body>
+</html>
