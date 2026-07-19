@@ -1,7 +1,7 @@
 ---
 title: "The Password Didn't Matter"
 date: 2026-07-19
-type: research
+type: vdp
 tags: [Web, IDOR, Access Control, Disclosure]
 ---
 
