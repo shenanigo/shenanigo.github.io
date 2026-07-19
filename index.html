@@ -260,8 +260,9 @@ footer {
     <h1>Writing</h1>
 
     <div class="filters" id="filters">
-      <button class="filter-btn active" data-filter="research">research</button>
+      <button class="filter-btn active" data-filter="all">all</button>
       <button class="filter-btn" data-filter="vdp">vdp</button>
+      <button class="filter-btn" data-filter="research">research</button>
       <button class="filter-btn" data-filter="analysis">analysis</button>
     </div>
 
@@ -327,7 +328,7 @@ document.querySelectorAll('[data-page]').forEach(a => {
 });
 
 // ── Posts ───────────────────────────────────────────────
-let currentFilter = 'research';
+let currentFilter = 'all';
 
 function renderPosts() {
   const container = document.getElementById('post-list');
