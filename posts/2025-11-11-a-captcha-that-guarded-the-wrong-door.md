@@ -1,7 +1,7 @@
 ---
 title: "A CAPTCHA That Guarded the Wrong Door"
 date: 2025-11-11
-type: research
+type: vdp
 tags: [Web, Broken-Access-Control, CAPTCHA, SMS-Abuse]
 ---
 During account registration, a "resend verification code" endpoint — `/ResendSms` — would send an SMS to *any* number an attacker specified, not the number actually entered during registration. A CAPTCHA guards the start of the registration flow, but once inside a registration session the resend action trusts attacker-supplied input and fires real SMS. The registration data itself is never verified: any pattern-valid email and phone number is accepted. Class: Broken Access Control / business logic (≈ CWE-639) plus Improper Control of Interaction Frequency (CWE-799).

@@ -1,7 +1,7 @@
 ---
 title: "How EtherHiding Actually Works"
 date: 2026-07-10
-type: research
+type: analysis
 tags: [EtherHiding, ClearFake, Blockchain, Malware, Threat-Intel]
 ---
 Most malware needs somewhere to live. A server, a bucket, a bulletproof host — some box with an IP and usually a domain in front of it. That's also its weakness: once a defender finds the address, they block it, and once law enforcement finds the host, they seize it. EtherHiding is the attacker's answer to that problem. Instead of a server you can take down, the payload lives inside a public blockchain — and there's nothing to seize. I ran into it while pulling apart a compromised WordPress site, and the mechanics are worth understanding properly, because the usual "just block the C2" reflex doesn't map cleanly onto it.

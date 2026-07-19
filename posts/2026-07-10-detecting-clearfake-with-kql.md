@@ -1,7 +1,7 @@
 ---
 title: "Detecting ClearFake with KQL, Mapped to ATT&CK"
 date: 2026-07-10
-type: research
+type: analysis
 tags: [KQL, Detection-Engineering, ClearFake, MITRE-ATTACK, Defender]
 ---
 The companion post to this one ends on an uncomfortable fact: the blockchain leg of an EtherHiding delivery can't be taken down, because the payload lives in an immutable smart contract. You block the transport where you can, but some fetches will always slip a static list. So the real detection has to sit on the endpoint, watching for what the attack *does* rather than where it comes from. This is how I built that detection for a ClearFake / ClickFix chain in KQL, and — just as importantly — how I decided what to key on and what to leave alone.

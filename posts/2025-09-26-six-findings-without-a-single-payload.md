@@ -1,7 +1,7 @@
 ---
 title: "Six Findings Without a Single Payload"
 date: 2025-09-26
-type: research
+type: vdp
 tags: [Web, Recon, CVE-Triage, Disclosure]
 ---
 A passive technology fingerprint of a file-sharing web application surfaced an entire stack of outdated front-end libraries sitting on top of an end-of-life server platform. Six coordinated disclosures came out of it — and not one required sending a malicious request. This is the long version: every finding, why it mattered, and how each was classified without overstating it.

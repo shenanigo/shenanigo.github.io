@@ -1,7 +1,7 @@
 ---
 title: "An SMS Endpoint That Trusted Everybody"
 date: 2026-06-03
-type: research
+type: vdp
 tags: [Web, Broken-Access-Control, SMS-Abuse, Bug-Bounty]
 ---
 A phone-number verification endpoint — meant for an authenticated user adding a new number to their account — could be called without an account and without ever starting registration. From a logged-out browser, a single request triggered a real SMS to *any* number I supplied. A per-session retry cap existed, but it reset on navigation, leaving no meaningful brake on abuse. Class: Missing Authentication for a Critical Function (CWE-306) / Broken Access Control (OWASP A01:2021).
