@@ -5,8 +5,6 @@ type: research
 tags: [detection-engineering, kql, cobalt-strike, threat-hunting, c2]
 ---
 
-# The URI Chokepoint: Hunting Cobalt Strike Beacons in Proxy Logs
-
 Most Cobalt Strike detection content focuses on the parts of the tool that are hardest to
 change: default TLS certificates, named pipe patterns, stager URI checksums, sleep-mask
 artefacts in memory. Those work, but they age badly. Operators patch them out, and the
